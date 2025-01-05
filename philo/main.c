@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 22:21:36 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/05 13:45:16 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/05 19:17:58 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,11 @@ int validate_args(int argc, char **argv)
     {
         if (ft_atoi(argv[i]) <= 0)
             return (1);
+        if (i > 1 && ft_atoi(argv[1]) < 60) 
+        {
+            printf("Error: time values must be at least 60ms\n");
+            return (1);
+        }
         i++;
     }
     return (0);
@@ -64,6 +69,7 @@ int main(int argc, char **argv)
     }
     pthread_create(&monitor, NULL, monitor_life, &table);
     start_simulation(&table);
+    
     pthread_join(monitor, NULL);
 
     free_table(&table);

@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 22:22:25 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/05 15:29:50 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/05 18:31:35 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,25 +21,31 @@ void start_simulation(t_table *table)
     i = 0;
     while (i < table->num_philosophers)
     {
+        // Atualiza o tempo da última refeição no início da simulação
+        table->philosophers[i].last_meal_time = table->start_time;
         pthread_create(&table->philosophers[i].thread, NULL,
                        philosopher_life, &table->philosophers[i]);
         i++;
     }
-    /*i = 0;
+    i = 0;
     while (i < table->num_philosophers)
     {
         pthread_join(table->philosophers[i].thread, NULL);
         i++;
-    }*/
+    }
 }
 
 void *monitor_life(void *arg)
 {
     t_table *table;
+    int     i;
 
     table = (t_table *)arg;
+    i = 0;
     while (!table->stop_simulation)
     {
+        if (i == table->num_philosophers - 1)
+            i = 0;
         pthread_mutex_lock(&table->meal_lock);
         if (table->philosophers_done == table->num_philosophers)
         {
@@ -48,7 +54,15 @@ void *monitor_life(void *arg)
             return (NULL);
         }
         pthread_mutex_unlock(&table->meal_lock);
-        
+        if ((get_current_time() - table->philosophers[i].last_meal_time) > table->time_to_die)
+        {
+            table->stop_simulation = 1;
+            pthread_mutex_lock(&table->print_lock);
+            print_action(table->philosophers[i].id, "died");
+            pthread_mutex_unlock(&table->print_lock);
+            return (NULL);
+        }
+        i++;
         usleep(1000); // Pequeno delay para evitar uso excessivo de CPU
     }
     return (NULL);
@@ -79,8 +93,6 @@ int init_table(t_table *table, int argc, char **argv)
     table->philosophers = malloc(sizeof(t_philosopher) * table->num_philosophers);
     if (!table->forks || !table->philosophers)
         return (1);
-    
-     
 
     //initialization of mutex(forks) and philosophers
     i = 0;

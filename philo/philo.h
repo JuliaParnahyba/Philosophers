@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 22:13:39 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/05 13:41:36 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/05 18:18:32 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,14 @@ typedef struct s_philosopher
     struct s_table  *table; //pointer to the table
 }                   t_philosopher;
 
+/* TO CHECK FORKS */
+typedef struct s_fork
+{
+    pthread_mutex_t fork; //mutex to represent the fork
+    int             in_use;  // 1 = ocupado, 0 = livre
+}                   t_fork;
+
+
 /* TO REPRESENTING THE TABLE */
 typedef struct s_table 
 {
@@ -40,12 +48,13 @@ typedef struct s_table
     int             time_to_sleep; //time to sleep in ms
     int             meals_required; //number of meals required
     int             philosophers_done; //number of philosophers that have eaten the required number of meals
-    pthread_mutex_t meal_lock; //mutex to protect the meals_required
-    pthread_mutex_t *forks; //array of mutex to represente the forks
-    pthread_mutex_t print_lock; //mutex to protect the print
-    t_philosopher   *philosophers; //array of philosophers
-    long            start_time; //timestamp of the start of the simulation
     int             stop_simulation; //flag to stop the simulation
+    long            start_time; //timestamp of the start of the simulation
+    t_fork          *forks_locks; //array of forks
+    pthread_mutex_t *forks; //array of mutexes to protect the forks
+    pthread_mutex_t meal_lock; //mutex to protect the meals_required
+    pthread_mutex_t print_lock; //mutex to protect the print
+    t_philosopher   *philosophers; //array of philosophers    
 }                   t_table;
 
 /* THE ALL FUNCTIONS */
@@ -69,15 +78,9 @@ void    to_think(t_philosopher *philo);
 /* UTILS */
 long    get_current_time(void);
 void    print_action(int id, const char *action);
-/*long    get_time(void);
-void    print_status(t_philosopher *philo, char *status);
-void    print_error(char *msg);
-void    ft_usleep(long time);
-void    ft_sleep(long time);*/
+void    release_forks(t_philosopher *philo);
 
 /* FROM LIBFT */
 int     ft_atoi(const char *nptr);
-
-
 
 # endif

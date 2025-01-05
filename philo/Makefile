@@ -6,7 +6,7 @@
 #    By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/04 22:38:37 by jparnahy          #+#    #+#              #
-#    Updated: 2025/01/05 00:52:21 by jparnahy         ###   ########.fr        #
+#    Updated: 2025/01/05 19:20:33 by jparnahy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,11 +72,25 @@ norm:
 	@echo
 
 # INDIVIDUAL TESTS
-test_valid:
+test_1:
 	@echo "$(YELLOW)$(ITALIC)Running tests ...$(RESET)"
 	@echo
 
-	@echo "$(GREEN)Test: Valid arguments$(RESET)"
+	@echo "$(GREEN)The philosopher should not eat and should die$(RESET)"
+	@echo "$(DARK_GRAY)./$(NAME) 1 800 200 200$(RESET)"
+	@./$(NAME) 1 800 200 200; \
+		if [ $$? -ne 0 ]; then \
+			echo "$(RED)Unexpected error!$(RESET)"; \
+		else \
+			echo "$(CYAN)Test passed!$(RESET)"; \
+		fi
+	@echo
+
+test_5:
+	@echo "$(YELLOW)$(ITALIC)Running tests ...$(RESET)"
+	@echo
+
+	@echo "$(GREEN)No philosopher should die $(RESET)"
 	@echo "$(DARK_GRAY)./$(NAME) 5 800 200 200$(RESET)"
 	@./$(NAME) 5 800 200 200; \
 		if [ $$? -ne 0 ]; then \
@@ -86,13 +100,58 @@ test_valid:
 		fi
 	@echo
 
-test_minimal:
+test_max_meals:
 	@echo "$(YELLOW)$(ITALIC)Running tests ...$(RESET)"
 	@echo
 
-	@echo "$(GREEN)Test: Minimal philosophers (1)$(RESET)"
-	@echo "$(DARK_GRAY)./$(NAME) 1 800 200 200$(RESET)"
-	@./$(NAME) 1 800 200 200; \
+	@echo "$(GREEN)No philosopher should die \
+		and the simulation should stop when \
+		every philosopher has eaten at least 7 times$(RESET)"
+	@echo "$(DARK_GRAY)./$(NAME) 5 800 200 200 7$(RESET)"
+	@./$(NAME) 5 800 200 200 7; \
+		if [ $$? -ne 0 ]; then \
+			echo "$(RED)Unexpected error!$(RESET)"; \
+		else \
+			echo "$(CYAN)Test passed!$(RESET)"; \
+		fi
+	@echo
+
+test_4_410:
+	@echo "$(YELLOW)$(ITALIC)Running tests ...$(RESET)"
+	@echo
+
+	@echo "$(GREEN)No philosopher should die$(RESET)"
+	@echo "$(DARK_GRAY)./$(NAME) 4 410 200 200$(RESET)"
+	@./$(NAME) 4 410 200 200; \
+		if [ $$? -ne 0 ]; then \
+			echo "$(RED)Unexpected error!$(RESET)"; \
+		else \
+			echo "$(CYAN)Test passed!$(RESET)"; \
+		fi
+	@echo
+
+test_4_310:
+	@echo "$(YELLOW)$(ITALIC)Running tests ...$(RESET)"
+	@echo
+
+	@echo "$(GREEN)One philosopher should die$(RESET)"
+	@echo "$(DARK_GRAY)./$(NAME) 4 310 200 100$(RESET)"
+	@./$(NAME) 4 310 200 100; \
+		if [ $$? -ne 0 ]; then \
+			echo "$(RED)Unexpected error!$(RESET)"; \
+		else \
+			echo "$(CYAN)Test passed!$(RESET)"; \
+		fi
+	@echo
+
+test_2:
+	@echo "$(YELLOW)$(ITALIC)Running tests ...$(RESET)"
+	@echo
+
+	@echo "$(GREEN)check the different times: \
+		a death delayed by more than 10 ms is unacceptable$(RESET)"
+	@echo "$(DARK_GRAY)./$(NAME) 2 310 200 100$(RESET)"
+	@./$(NAME) 2 310 200 100; \
 		if [ $$? -ne 0 ]; then \
 			echo "$(RED)Unexpected error!$(RESET)"; \
 		else \
@@ -113,22 +172,36 @@ test_stress:
 			echo "$(CYAN)Test passed!$(RESET)"; \
 		fi
 	@echo
-
-test_max_meals:
+	
+test_ms:
 	@echo "$(YELLOW)$(ITALIC)Running tests ...$(RESET)"
 	@echo
 
-	@echo "$(GREEN)Test: With max meals condition$(RESET)"
-	@echo "$(DARK_GRAY)./$(NAME) 5 800 200 200 7$(RESET)"
-	@./$(NAME) 5 800 200 200 7; \
-		if [ $$? -ne 0 ]; then \
-			echo "$(RED)Unexpected error!$(RESET)"; \
+	@echo "$(GREEN)The philosopher should not eat and should die$(RESET)"
+	@echo "$(DARK_GRAY)./$(NAME) 5 800 50 50$(RESET)"
+	@./$(NAME) 5 800 50 50; \
+		if [ $$? -eq 1 ]; then \
+			echo "$(CYAN)Error handled successfully!$(RESET)"; \
 		else \
-			echo "$(CYAN)Test passed!$(RESET)"; \
+			echo "$(RED)Unexpected behavior!$(RESET)"; \
 		fi
 	@echo
 
 test_invalid_neg:
+	@echo "$(YELLOW)$(ITALIC)Running tests ...$(RESET)"
+	@echo
+
+	@echo "$(GREEN)Test: Invalid arguments$(RESET)"
+	@echo "$(DARK_GRAY)./$(NAME) -5 800 200 200$(RESET)"
+	@./$(NAME) 5 -800 200 200; \
+		if [ $$? -eq 1 ]; then \
+			echo "$(CYAN)Error handled successfully!$(RESET)"; \
+		else \
+			echo "$(RED)Unexpected behavior!$(RESET)"; \
+		fi
+	@echo
+
+test_invalid_alpha:
 	@echo "$(YELLOW)$(ITALIC)Running tests ...$(RESET)"
 	@echo
 
@@ -149,48 +222,6 @@ test_invalid_6:
 	@echo "$(GREEN)Test: Invalid arguments$(RESET)"
 	@echo "$(DARK_GRAY)./$(NAME) 5 800 200 200 7 8$(RESET)"
 	@./$(NAME) 5 800 200 200 7 8; \
-		if [ $$? -eq 1 ]; then \
-			echo "$(CYAN)Error handled successfully!$(RESET)"; \
-		else \
-			echo "$(RED)Unexpected behavior!$(RESET)"; \
-		fi
-	@echo
-
-test_invalid_7:
-	@echo "$(YELLOW)$(ITALIC)Running tests ...$(RESET)"
-	@echo
-
-	@echo "$(GREEN)Test: Invalid arguments$(RESET)"
-	@echo "$(DARK_GRAY)./$(NAME) 5 800 200 200 7 8 9$(RESET)"
-	@./$(NAME) 5 800 200 200 7 8 9; \
-		if [ $$? -eq 1 ]; then \
-			echo "$(CYAN)Error handled successfully!$(RESET)"; \
-		else \
-			echo "$(RED)Unexpected behavior!$(RESET)"; \
-		fi
-	@echo
-
-test_invalid_8:
-	@echo "$(YELLOW)$(ITALIC)Running tests ...$(RESET)"
-	@echo
-
-	@echo "$(GREEN)Test: Invalid arguments$(RESET)"
-	@echo "$(DARK_GRAY)./$(NAME) 5 800 200 200 7 8 9 10$(RESET)"
-	@./$(NAME) 5 800 200 200 7 8 9 10; \
-		if [ $$? -eq 1 ]; then \
-			echo "$(CYAN)Error handled successfully!$(RESET)"; \
-		else \
-			echo "$(RED)Unexpected behavior!$(RESET)"; \
-		fi
-	@echo
-
-test_invalid_9:
-	@echo "$(YELLOW)$(ITALIC)Running tests ...$(RESET)"
-	@echo
-
-	@echo "$(GREEN)Test: Invalid arguments$(RESET)"
-	@echo "$(DARK_GRAY)./$(NAME) 5 800 200 200 7 8 9 10 11$(RESET)"
-	@./$(NAME) 5 800 200 200 7 8 9 10 11; \
 		if [ $$? -eq 1 ]; then \
 			echo "$(CYAN)Error handled successfully!$(RESET)"; \
 		else \
@@ -226,5 +257,8 @@ hell:
 
 # PHONY RULES
 .PHONY: all clean fclean re \
-	test_valid test_minimal test_stress test_max_meals \
-	test_invalid_neg test_invalid_6 test_invalid_7 test_invalid_8 test_invalid_9 test_missing
+	norm \
+	test_1 test_5 test_max_meals test_4_410 test_3_310 test_2 test_stress \
+	test_invalid_neg test_invalid_6 test_invalid_7 test_invalid_8 test_invalid_9 test_missing \
+	test \
+	hell
