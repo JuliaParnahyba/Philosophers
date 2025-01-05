@@ -57,6 +57,8 @@ A simulação termina quando um filósofo morre ou todos comem um número espec�
   - **Apresentação (defense)**
   - **Peer-evaluation**
 
+
+##
 © 2025 Parnahyba - 42 Rio
 
 
