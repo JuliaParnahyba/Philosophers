@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 22:21:36 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/05 01:42:05 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/05 13:45:16 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,13 @@ void free_table(t_table *table)
     i = 0;
     while (i < table->num_philosophers)
     {
-        pthread_mutex_destroy(&table->forks[i]);  // Destruir mutex de cada garfo
+        pthread_mutex_destroy(&table->forks[i]);
         i++;
     }
-    pthread_mutex_destroy(&table->print_lock);  // Destruir mutex de impressão
-    free(table->forks);  // Liberar array de mutexes
-    free(table->philosophers);  // Liberar array de filósofos
+    pthread_mutex_destroy(&table->print_lock);
+    pthread_mutex_destroy(&table->meal_lock);  // Destrói o mutex meal_lock
+    free(table->forks);
+    free(table->philosophers);
 }
 
 int validate_args(int argc, char **argv)
@@ -61,9 +62,12 @@ int main(int argc, char **argv)
         printf("Error: failed to initialize table\n");
         return (1);
     }
-    pthread_create(&monitor, NULL, monitor_routine, &table);
+    pthread_create(&monitor, NULL, monitor_life, &table);
     start_simulation(&table);
     pthread_join(monitor, NULL);
+
     free_table(&table);
+    
+    printf("Simulation ended\n");
     return (0);
 }
