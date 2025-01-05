@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 12:23:11 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/05 19:12:49 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/05 20:08:43 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,17 @@ void    *philosopher_life(void *arg)
     philo = (t_philosopher *)arg;
     while (!philo->table->stop_simulation)
     {
+        if (philo->table->num_philosophers == 1)
+        {
+            philo->table->philosophers->id = 1;
+            to_think(philo);
+            take_forks(philo);
+            philo->table->stop_simulation = 1;
+            pthread_mutex_lock(&philo->table->print_lock);
+            print_action(philo->id, "died");
+            pthread_mutex_unlock(&philo->table->print_lock);
+            break ;
+        }
         to_think(philo);
         take_forks(philo);
         to_eat(philo);

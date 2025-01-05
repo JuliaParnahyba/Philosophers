@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 22:21:36 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/05 19:17:58 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/05 20:09:33 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void free_table(t_table *table)
     while (i < table->num_philosophers)
     {
         pthread_mutex_destroy(&table->forks[i]);
+        pthread_mutex_destroy(table->philosophers[i].left_fork);
+        pthread_mutex_destroy(table->philosophers[i].right_fork);
         i++;
     }
     pthread_mutex_destroy(&table->print_lock);
@@ -33,17 +35,26 @@ int validate_args(int argc, char **argv)
     int i;
 
     i = 1;
+    // Verifica se o número de filósofos é menor que 200
+    if (ft_atoi(argv[1]) > 200)
+    {
+        printf("Error: Number of Phisopher must be lower then 200\n");
+        return (1);
+    }
+    // Verifica se o tempo fornecido está abaixo de 60ms
+    if (ft_atoi(argv[2]) < 60 || ft_atoi(argv[3]) < 60 || ft_atoi(argv[4]) < 60)
+    {
+        printf("Error: time values must be at least 60ms\n");
+        return (1);
+    }
     while (i < argc)
     {
         if (ft_atoi(argv[i]) <= 0)
             return (1);
-        if (i > 1 && ft_atoi(argv[1]) < 60) 
-        {
-            printf("Error: time values must be at least 60ms\n");
-            return (1);
-        }
         i++;
     }
+    
+    
     return (0);
 }
 
