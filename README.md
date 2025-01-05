@@ -60,7 +60,6 @@ A simulação termina quando um filósofo morre ou todos comem um número espec�
 
 ##
 © 2025 Parnahyba - 42 Rio
-##
 
 
 
