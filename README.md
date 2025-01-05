@@ -2,6 +2,7 @@
 
 > "I never thought philosophy would be so deadly"
 
+
 ## Descrição do Projeto
 O projeto **Philosophers** explora os conceitos básicos de threading em C, simulando o clássico problema dos filósofos comensais. A proposta é desenvolver um programa que gerencie múltiplos threads e mutexes, garantindo a sincronização adequada para evitar condições de corrida e impasses.
 
@@ -13,6 +14,7 @@ A implementação visa reproduzir uma mesa com filósofos que alternam entre com
 
 A simulação termina quando um filósofo morre ou todos comem um número específico de vezes (se configurado).
 
+
 ## Recursos Utilizados
 - **Linguagem**: C
 - **Threading**: `pthread_create`, `pthread_detach`, `pthread_join`
@@ -20,6 +22,7 @@ A simulação termina quando um filósofo morre ou todos comem um número espec�
 - **Temporização**: `usleep`, `gettimeofday`
 - **Memória**: `malloc`, `free`
 - **Utilitários**: `printf`, `write`, `memset`
+
 
 ## Regras Globais
 - **Sem variáveis globais.** 
@@ -32,6 +35,7 @@ A simulação termina quando um filósofo morre ou todos comem um número espec�
     [timestamp_in_ms] X is sleeping
     [timestamp_in_ms] X is thinking
     [timestamp_in_ms] X died
+
 
 ## Estrutura do Projeto
 - **`philo/`** – Contém todos os arquivos do projeto.
@@ -46,7 +50,6 @@ A simulação termina quando um filósofo morre ou todos comem um número espec�
 - **Sincronização de tempo e operações.**
 - **Implementação prática de algoritmos clássicos de sincronização.**
 
----
 
 ## Regras de Avaliação
 - O projeto segue a [Norm da 42](https://github.com/42School/norminette).
