@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 13:32:04 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/09 14:38:50 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:56:10 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int init_forks(t_table *table)
     while (i < table->nb_philo)
     {
         table->philos[i].left_fork = &table->forks[i];
-        table->philos[i].right_fork = &table->forks[i - 1];
+        table->philos[i].right_fork = &table->forks[(i + 1) % table->nb_philo];
         i++;
     }
     return (0);
@@ -84,12 +84,6 @@ int init_table(t_table *table, int argc, char **argv)
         table->nb_must_eat = (int) ft_atoi(argv[5]);
     else
         table->nb_must_eat = -1;
-    if (table->nb_philo <= 0 || table->nb_philo > 200 || table->time_to_die <= 0
-        || table->time_to_eat <= 0 || table->time_to_sleep <= 0)
-    {
-        print_error(INPUT_ERROR_2, table);
-        return (1);
-    }
     table->dead = 0;
     table->the_end = 0;
     pthread_mutex_init(&table->print_lock, NULL);
