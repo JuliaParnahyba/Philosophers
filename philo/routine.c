@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 13:57:21 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/09 19:08:30 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/10 13:56:07 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ void    *philo_life(void *table_ptr)
     t_philo *philo;
 
     philo = (t_philo *)table_ptr;
-    pthread_mutex_lock(&philo->table->write_lock);
-    printf("time: %d", philo->table->dead);
-    pthread_mutex_unlock(&philo->table->write_lock);
+    pthread_mutex_lock(&philo->table->print_lock);
+    printf("data value: %d", philo->table->dead);
+    pthread_mutex_unlock(&philo->table->print_lock);
     while (philo->table->dead == 0)
     {
         pthread_mutex_lock(&philo->meal_lock);
-        if (philo->table->the_end == philo->table->nb_philo)
+        if (philo->table->the_end >= philo->table->nb_philo)
             philo->table->dead = 1;
         pthread_mutex_unlock(&philo->meal_lock);
     }
@@ -42,10 +42,10 @@ void    *maitre(void *philo_ptr)
             print_status(philo, PHILO_DIED);
         if (philo->count_eat == philo->table->nb_must_eat)
         {
-            pthread_mutex_lock(&philo->table->print_lock);
+            pthread_mutex_lock(&philo->table->table_lock);
             philo->table->the_end++;
             philo->count_eat++;
-            pthread_mutex_unlock(&philo->table->print_lock);
+            pthread_mutex_unlock(&philo->table->table_lock);
         }
         pthread_mutex_unlock(&philo->meal_lock);
     }
@@ -63,7 +63,7 @@ void    *the_routine(void *philo_ptr)
     while (philo->table->dead == 0)
     {
         to_eat(philo);
-        print_status(philo, PHILO_SLEEP);
+        print_status(philo, PHILO_THINK);
     }
     if (pthread_join(philo->thread, NULL))
         return ((void *)1);

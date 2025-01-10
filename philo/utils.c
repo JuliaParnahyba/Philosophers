@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 13:45:52 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/09 14:52:40 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/10 13:42:18 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ u_int64_t   get_time(void)
 
     if (gettimeofday(&tv, NULL))
         print_error(TIME_ERROR, NULL);
-    time = tv.tv_sec * 1000;
+    time = tv.tv_sec * (u_int64_t)1000;
     time += tv.tv_usec / 1000;
     return (time);
 }

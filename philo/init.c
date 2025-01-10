@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 13:32:04 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/09 18:56:10 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/10 15:21:48 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,22 @@
 
 int allocation(t_table *table)
 {
+    table->threads_id = malloc(sizeof(pthread_t) * table->nb_philo);
+    if (!table->threads_id)
+    {
+        print_error(MALLOC_ERROR_1, table);
+        return (1);
+    }
     table->philos = malloc(sizeof(t_philo) * table->nb_philo);
     if (!table->philos)
     {
         print_error(MALLOC_ERROR_2, table);
         return (1);
     }
-    table->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * table->nb_philo);
+    table->forks = malloc(sizeof(pthread_mutex_t) * table->nb_philo);
     if (!table->forks)
     {
         print_error(MALLOC_ERROR_3, table);
-        return (1);
-    }
-    table->threads = (pthread_t *)malloc(sizeof(pthread_t) * table->nb_philo);
-    if (!table->threads)
-    {
-        print_error(MALLOC_ERROR_1, table);
         return (1);
     }
     return (0);
@@ -45,11 +45,13 @@ int init_forks(t_table *table)
         pthread_mutex_init(&table->forks[i], NULL);
         i++;
     }
-    i = 0;
+    table->philos[0].left_fork = &table->forks[0];
+    table->philos[0].right_fork = &table->forks[table->nb_philo - 1];
+    i = 1;
     while (i < table->nb_philo)
     {
         table->philos[i].left_fork = &table->forks[i];
-        table->philos[i].right_fork = &table->forks[(i + 1) % table->nb_philo];
+        table->philos[i].right_fork = &table->forks[i - 1];
         i++;
     }
     return (0);
@@ -87,11 +89,11 @@ int init_table(t_table *table, int argc, char **argv)
     table->dead = 0;
     table->the_end = 0;
     pthread_mutex_init(&table->print_lock, NULL);
-    pthread_mutex_init(&table->write_lock, NULL);
+    pthread_mutex_init(&table->table_lock, NULL);
     return (0);
 }
 
-int init(t_table *table, int argc, char **argv)
+int init_dnr(t_table *table, int argc, char **argv)
 {
     if (init_table(table, argc, argv))
         return (1);

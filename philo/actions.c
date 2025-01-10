@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 14:16:10 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/09 14:25:33 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/10 13:45:24 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void    take_forks(t_philo *philo)
 {
-    pthread_mutex_lock(philo->left_fork);
-    print_status(philo, PHILO_FORK);
     pthread_mutex_lock(philo->right_fork);
-    print_status(philo, PHILO_FORK);
+    print_status(philo, PHILO_RFORK);
+    pthread_mutex_lock(philo->left_fork);
+    print_status(philo, PHILO_LFORK);
 }
 
 void    to_sleep(t_philo *philo)
