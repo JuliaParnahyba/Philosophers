@@ -6,16 +6,18 @@
 #    By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 15:39:57 by jparnahy          #+#    #+#              #
-#    Updated: 2025/01/10 15:40:00 by jparnahy         ###   ########.fr        #
+#    Updated: 2025/01/10 18:31:07 by jparnahy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
 SRC = main.c \
-		actions.c \
+		dinner.c \
+		finishing_dnr.c \
 		init.c \
-		libft.c \
+		messanger.c \
+		routine.c \
 		utils.c \
 
 OBJ = $(SRC:.c=.o)

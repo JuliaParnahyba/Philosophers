@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:38:57 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/10 16:02:52 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/10 18:24:12 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@
 
 /* TO ALLOCATION ERROR  */
 # define MALLOC_ERROR_1 "Error while allocating memory for threads ids" //alloc_err_1
-# define MALLOC_ERROR_2 "Error while allocating philos" //alloc_err_3
-# define MALLOC_ERROR_3 "Error while allocating forks" //alloc_err_2
+# define MALLOC_ERROR_2 "Error while allocating forks" //alloc_err_2
+# define MALLOC_ERROR_3 "Error while allocating philos" //alloc_err_3
 
 /* TO PTHREAD ERROR */
 # define PTHREAD_ERROR_THR "Error while creating thread" //th_err
@@ -63,7 +63,7 @@ typedef struct  s_philo
     pthread_mutex_t *l_fork; 
     pthread_mutex_t *r_fork; 
     pthread_mutex_t lock; 
-    struct s_table  *data; 
+    struct s_data  *data; 
 }                   t_philo;
 
 typedef struct  s_data
@@ -91,11 +91,11 @@ void        messages(char *str, t_philo *philo);
 void        ft_exit(t_data *data);
 
 /* INIT */
-int         thread_init(t_data *data);
-int         init(t_data *data, int argc, char **argv);
+int         thread_init(t_data *data); //thread_init
+int         init(t_data *data, char **argv, int argc);
 
 /* VALIDATE */
-int         validate_args(int argc, char **argv);
+//int         input_checker(int argc, char **argv);
 int         input_checker(char **argv); 
 
 /* TIME */
