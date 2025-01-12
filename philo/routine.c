@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:22:51 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/10 18:34:52 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/12 18:13:14 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,6 @@ void	*monitor(void *data_pointer)
 	t_philo	*philo;
 
 	philo = (t_philo *) data_pointer;
-	pthread_mutex_lock(&philo->data->write);
-	printf("data val: %d", philo->data->dead);
-	pthread_mutex_unlock(&philo->data->write);
 	while (philo->data->dead == 0)
 	{
 		pthread_mutex_lock(&philo->lock);
@@ -80,19 +77,19 @@ int	thread_init(t_data *data)
 	if (data->meals_nb > 0)
 	{
 		if (pthread_create(&t0, NULL, &monitor, &data->philos[0]))
-			return (error(PTHREAD_ERROR_THR, data));
+			return (print_error(PTHREAD_ERROR_THR, data));
 	}
 	while (++i < data->philo_num)
 	{
 		if (pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]))
-			return (error(PTHREAD_ERROR_THR, data));
+			return (print_error(PTHREAD_ERROR_THR, data));
 		ft_usleep(1);
 	}
 	i = -1;
 	while (++i < data->philo_num)
 	{
 		if (pthread_join(data->tid[i], NULL))
-			return (error(PTHREAD_ERROR_JOIN, data));
+			return (print_error(PTHREAD_ERROR_JOIN, data));
 	}
 	return (0);
 }

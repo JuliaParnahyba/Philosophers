@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:05:39 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/10 18:25:07 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/12 16:13:25 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ int	alloc(t_data *data)
 {
 	data->tid = malloc(sizeof(pthread_t) * data->philo_num);
 	if (!data->tid)
-		return (error(MALLOC_ERROR_1, data));
+		return (print_error(MALLOC_ERROR_1, data));
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->philo_num);
 	if (!data->forks)
-		return (error(MALLOC_ERROR_2, data));
+		return (print_error(MALLOC_ERROR_2, data));
 	data->philos = malloc(sizeof(t_philo) * data->philo_num);
 	if (!data->philos)
-		return (error(MALLOC_ERROR_3, data));
+		return (print_error(MALLOC_ERROR_3, data));
 	return (0);
 }
 
@@ -76,7 +76,7 @@ int	init_data(t_data *data, char **argv, int argc)
 		data->meals_nb = -1;
 	if (data->philo_num <= 0 || data->philo_num > 200 || data->death_time < 60
 		|| data->eat_time < 60 || data->sleep_time < 60)
-		return (error(INPUT_ERROR_1, NULL));
+		return (print_error(INPUT_ERROR_1, NULL));
 	data->dead = 0;
 	data->finished = 0;
 	pthread_mutex_init(&data->write, NULL);

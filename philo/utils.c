@@ -6,13 +6,13 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:07:54 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/10 18:17:10 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/12 18:13:55 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-long    ft_atoi(const char *nptr)
+long	ft_atoi(const char *nptr)
 {
 	int	i;
 	int	nbr;
@@ -35,6 +35,7 @@ long    ft_atoi(const char *nptr)
 	}
 	return (nbr * sign);
 }
+
 int	input_checker(char **argv)
 {
 	int	i;
@@ -52,7 +53,7 @@ int	input_checker(char **argv)
 				continue ;
 			}
 			if ((argv[i][j] < 48 || argv[i][j] > 57))
-				return (error(INPUT_ERROR_2, NULL));
+				return (print_error(INPUT_ERROR_2, NULL));
 			j++;
 		}
 		i++;
@@ -66,7 +67,7 @@ int	ft_usleep(useconds_t time)
 
 	start = get_time();
 	while ((get_time() - start) < time)
-		usleep(time / 10);
+		usleep(1000);
 	return (0);
 }
 

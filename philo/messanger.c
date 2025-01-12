@@ -6,15 +6,15 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 18:28:23 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/10 18:31:04 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/12 17:55:25 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	error(char *str, t_data *data)
+int	print_error(char *error, t_data *data)
 {
-	printf("%s\n", str);
+	printf("%s\n", error);
 	if (data)
 		ft_exit(data);
 	return (1);
