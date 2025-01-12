@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 17:03:20 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/12 18:00:33 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/12 20:05:38 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,30 +23,30 @@ u_int64_t	get_time(void)
 
 void	take_forks(t_philo *philo)
 {
-	pthread_mutex_lock(philo->r_fork);
-	messages(PHILO_FORK, philo);
-	pthread_mutex_lock(philo->l_fork);
-	messages(PHILO_FORK, philo);
+	pthread_mutex_lock(philo->right_fork);
+	print_status(PHILO_FORK, philo);
+	pthread_mutex_lock(philo->left_fork);
+	print_status(PHILO_FORK, philo);
 }
 
-void	drop_forks(t_philo *philo)
+void	sleeping(t_philo *philo)
 {
-	pthread_mutex_unlock(philo->l_fork);
-	pthread_mutex_unlock(philo->r_fork);
-	messages(PHILO_SLEEP, philo);
-	ft_usleep(philo->data->sleep_time);
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
+	print_status(PHILO_SLEEP, philo);
+	ft_usleep(philo->table->time_to_sleep);
 }
 
-void	eat(t_philo *philo)
+void	eating(t_philo *philo)
 {
 	take_forks(philo);
 	pthread_mutex_lock(&philo->lock);
 	philo->eating = 1;
-	philo->time_to_die = get_time() + philo->data->death_time;
-	messages(PHILO_EAT, philo);
+	philo->the_death_time = get_time() + philo->table->time_to_die;
+	print_status(PHILO_EAT, philo);
 	philo->eat_count++;
 	pthread_mutex_unlock(&philo->lock);
-	ft_usleep(philo->data->eat_time);
+	ft_usleep(philo->table->time_to_eat);
 	philo->eating = 0;
-	drop_forks(philo);
+	sleeping(philo);
 }

@@ -6,90 +6,90 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:22:51 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/12 18:13:14 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/12 20:15:47 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*monitor(void *data_pointer)
+void	*maitre(void *table_pointer)
 {
 	t_philo	*philo;
 
-	philo = (t_philo *) data_pointer;
-	while (philo->data->dead == 0)
+	philo = (t_philo *) table_pointer;
+	while (philo->table->dead == 0)
 	{
 		pthread_mutex_lock(&philo->lock);
-		if (philo->data->finished >= philo->data->philo_num)
-			philo->data->dead = 1;
+		if (philo->table->finished >= philo->table->philo_nbr)
+			philo->table->dead = 1;
 		pthread_mutex_unlock(&philo->lock);
 	}
 	return ((void *)0);
 }
 
-void	*supervisor(void *philo_pointer)
+void	*host(void *philo_pointer)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *) philo_pointer;
-	while (philo->data->dead == 0)
+	while (philo->table->dead == 0)
 	{
 		pthread_mutex_lock(&philo->lock);
-		if (get_time() >= philo->time_to_die && philo->eating == 0)
-			messages(PHILO_DIED, philo);
-		if (philo->eat_count == philo->data->meals_nb)
+		if (get_time() >= philo->the_death_time && philo->eating == 0)
+			print_status(PHILO_DIED, philo);
+		if (philo->eat_count == philo->table->max_meals)
 		{
-			pthread_mutex_lock(&philo->data->lock);
-			philo->data->finished++;
+			pthread_mutex_lock(&philo->table->lock);
+			philo->table->finished++;
 			philo->eat_count++;
-			pthread_mutex_unlock(&philo->data->lock);
+			pthread_mutex_unlock(&philo->table->lock);
 		}
 		pthread_mutex_unlock(&philo->lock);
 	}
 	return ((void *)0);
 }
 
-void	*routine(void *philo_pointer)
+void	*dinner_party(void *philo_pointer)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *) philo_pointer;
-	philo->time_to_die = philo->data->death_time + get_time();
-	if (pthread_create(&philo->t1, NULL, &supervisor, (void *)philo))
+	philo->the_death_time = philo->table->time_to_die + get_time();
+	if (pthread_create(&philo->philo_thr_id, NULL, &host, (void *)philo))
 		return ((void *)1);
-	while (philo->data->dead == 0)
+	while (philo->table->dead == 0)
 	{
-		eat(philo);
-		messages(PHILO_THINK, philo);
+		eating(philo);
+		print_status(PHILO_THINK, philo);
 	}
-	if (pthread_join(philo->t1, NULL))
+	if (pthread_join(philo->philo_thr_id, NULL))
 		return ((void *)1);
 	return ((void *)0);
 }
 
-int	thread_init(t_data *data)
+int	thread_init(t_table *table)
 {
 	int			i;
 	pthread_t	t0;
 
 	i = -1;
-	data->start_time = get_time();
-	if (data->meals_nb > 0)
+	table->start_time = get_time();
+	if (table->max_meals > 0)
 	{
-		if (pthread_create(&t0, NULL, &monitor, &data->philos[0]))
-			return (print_error(PTHREAD_ERROR_THR, data));
+		if (pthread_create(&t0, NULL, &maitre, &table->philos[0]))
+			return (print_error(PTHREAD_ERROR_THR, table));
 	}
-	while (++i < data->philo_num)
+	while (++i < table->philo_nbr)
 	{
-		if (pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]))
-			return (print_error(PTHREAD_ERROR_THR, data));
+		if (pthread_create(&table->tid[i], NULL, &dinner_party, &table->philos[i]))
+			return (print_error(PTHREAD_ERROR_THR, table));
 		ft_usleep(1);
 	}
 	i = -1;
-	while (++i < data->philo_num)
+	while (++i < table->philo_nbr)
 	{
-		if (pthread_join(data->tid[i], NULL))
-			return (print_error(PTHREAD_ERROR_JOIN, data));
+		if (pthread_join(table->tid[i], NULL))
+			return (print_error(PTHREAD_ERROR_JOIN, table));
 	}
 	return (0);
 }

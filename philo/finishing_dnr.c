@@ -6,33 +6,33 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 18:30:11 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/12 18:00:46 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/12 19:47:33 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	clear_data(t_data	*data)
+void	free_table(t_table	*table)
 {
-	if (data->tid)
-		free(data->tid);
-	if (data->forks)
-		free(data->forks);
-	if (data->philos)
-		free(data->philos);
+	if (table->tid)
+		free(table->tid);
+	if (table->forks)
+		free(table->forks);
+	if (table->philos)
+		free(table->philos);
 }
 
-void	ft_exit(t_data *data)
+void	exit_dinner(t_table *table)
 {
 	int	i;
 
 	i = -1;
-	while (++i < data->philo_num)
+	while (++i < table->philo_nbr)
 	{
-		pthread_mutex_destroy(&data->forks[i]);
-		pthread_mutex_destroy(&data->philos[i].lock);
+		pthread_mutex_destroy(&table->forks[i]);
+		pthread_mutex_destroy(&table->philos[i].lock);
 	}
-	pthread_mutex_destroy(&data->write);
-	pthread_mutex_destroy(&data->lock);
-	clear_data(data);
+	pthread_mutex_destroy(&table->write);
+	pthread_mutex_destroy(&table->lock);
+	free_table(table);
 }

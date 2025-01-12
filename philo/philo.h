@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:38:57 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/12 18:09:00 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/12 20:06:18 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,15 @@
 # include <stdbool.h>
 # include <sys/time.h>
 
+/* COLORS */
+# define RED "\033[0;31m"
+# define GREEN "\033[0;32m"
+# define YELLOW "\033[0;33m"
+# define BLUE "\033[0;34m"
+
 /* TO INPUT ERROR */
+# define INPUT_ERROR_0 "The args must be:\n./philo <nbr_of_philos> \
+<time_to_die> <time_to_eat> <time_to_sleep> [nbr_of_times_must_eat]"
 # define INPUT_ERROR_1 "Error: invalid arguments"
 # define INPUT_ERROR_2 "Error: invalid characters in arguments"
 # define INPUT_ERROR_3 "Error: invalid number of arguments"
@@ -51,61 +59,61 @@
 # define PHILO_DIED "died"
 
 /* DATAS */
-struct	s_data;
+struct	s_table;
 
 typedef struct	s_philo
 {
-	pthread_t	t1; 
-	int		id; 
-	int		eat_count; 
-	int		status; 
-	int		eating; 
-	u_int64_t	time_to_die; 
-	pthread_mutex_t	*l_fork; 
-	pthread_mutex_t	*r_fork; 
-	pthread_mutex_t	lock; 
-	struct s_data	*data; 
-}			t_philo;
+	pthread_t		philo_thr_id;
+	int				philo_id;
+	int				eat_count;
+	int				status;
+	int				eating;
+	u_int64_t		the_death_time;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork; 
+	pthread_mutex_t	lock;
+	struct s_table	*table;
+}					t_philo;
 
-typedef struct	s_data
+typedef struct	s_table
 {
-	int             philo_num;
-	int             meals_nb;
+	int             philo_nbr;
+	int             max_meals;
 	int             dead;
 	int             finished;
-	u_int64_t       death_time;
-	u_int64_t       eat_time;
-	u_int64_t       sleep_time;
+	u_int64_t       time_to_die;
+	u_int64_t       time_to_eat;
+	u_int64_t       time_to_sleep;
 	u_int64_t       start_time;
 	pthread_mutex_t *forks;
 	pthread_mutex_t lock;
 	pthread_mutex_t write;
 	pthread_t       *tid;
 	t_philo         *philos;
-}                   t_data;
+}                   t_table;
 
 /* UTILS */
 long        ft_atoi(const char *str);
 int         ft_strcmp(char *str1, char *str2);
-int         print_error(char *error, t_data *data);
-void        messages(char *str, t_philo *philo);
-void        ft_exit(t_data *data);
+int         print_error(char *error, t_table *table);
+void        print_status(char *status, t_philo *philo);
+void        exit_dinner(t_table *table);
 
 /* INIT */
-int         thread_init(t_data *data);
-int         init(t_data *data, char **argv, int argc);
+int         thread_init(t_table *table);
+int         init(t_table *table, char **argv, int argc);
 
 /* VALIDATE */
-int         input_checker(char **argv); 
+int			validate_args(int argc, char **argv);
 
 /* TIME */
 u_int64_t   get_time(void);
 int         ft_usleep(useconds_t time);
 
 /* ACTIONS */
-void        eat(t_philo *philo);
+void        eating(t_philo *philo);
 
 /* ROTINE */
-void        *routine(void *philo_ptr);
+void        *dinner_party(void *philo_ptr);
 
 #endif
