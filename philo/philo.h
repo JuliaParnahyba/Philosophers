@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:38:57 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/13 14:21:03 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/13 14:22:36 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 # define EMOJI_FORK " 🍴"
 # define EMOJI_SLEEP " 😴"
 # define EMOJI_THINK " 🧐"
-# define EMOJI_SKULL " ⚰️ 🪦 💀 "
+# define EMOJI_SKULL "⚰️ 🪦 💀"
 
 /* TO INPUT ERROR */
 # define INPUT_ERROR_0 EMOJI_WARNING ITALIC" The args must be:\n" \
