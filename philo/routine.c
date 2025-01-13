@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:22:51 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/12 20:15:47 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/13 14:20:40 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	*host(void *philo_pointer)
 	{
 		pthread_mutex_lock(&philo->lock);
 		if (get_time() >= philo->the_death_time && philo->eating == 0)
-			print_status(PHILO_DIED, philo);
+			print_status(PHILO_DIED, philo, RED);
 		if (philo->eat_count == philo->table->max_meals)
 		{
 			pthread_mutex_lock(&philo->table->lock);
@@ -60,7 +60,7 @@ void	*dinner_party(void *philo_pointer)
 	while (philo->table->dead == 0)
 	{
 		eating(philo);
-		print_status(PHILO_THINK, philo);
+		print_status(PHILO_THINK, philo, CYAN);
 	}
 	if (pthread_join(philo->philo_thr_id, NULL))
 		return ((void *)1);

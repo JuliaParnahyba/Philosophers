@@ -6,7 +6,7 @@
 /*   By: jparnahy <jparnahy@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:07:54 by jparnahy          #+#    #+#             */
-/*   Updated: 2025/01/12 19:54:08 by jparnahy         ###   ########.fr       */
+/*   Updated: 2025/01/13 14:03:36 by jparnahy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,12 @@ int	ft_strcmp(char *s1, char *s2)
 		s2++;
 	}
 	return (*(char *)s1 - *(char *)s2);
+}
+
+int	ft_isalpha(int c)
+{
+	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
+		return (1024);
+	else
+		return (0);
 }
